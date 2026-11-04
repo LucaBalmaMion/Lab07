@@ -32,7 +32,7 @@ class Model:
             for biblio in lista_biblioteche:
                 if libro.id_biblioteca == biblio.id:
                     libro.nome_biblioteca = biblio.nome
-            if libro.nome_biblioteca == (biblioteca or None) and libro.genere == (genere or None):
+            if (libro.nome_biblioteca == biblioteca or biblioteca is None) and (libro.genere == genere or genere is None):
                  result.append(libro)
 
         return result
