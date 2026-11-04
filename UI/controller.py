@@ -57,8 +57,8 @@ class Controller:
         try:
             lista_libri = self._model.get_libri_filtrati(self.biblioteca_selezionata, self.genere_selezionato)
         except ConnectionError:
-            self._view.show_alert('errore di connessione al database')
             self._view.listview_libri.controls.clear()
+            self._view.show_alert('errore di connessione al database')
             return
         self._view.listview_libri.controls.clear()
         if len(lista_libri) == 0:
