@@ -20,11 +20,19 @@ class Controller:
     # POPOLA DROPDOWN
     # TODO
     def popola_dd_genere(self):
-        lista_generi = self._model.get_generi()
+        try:
+            lista_generi = self._model.get_generi()
+        except ConnectionError:
+            self._view.show_alert(('errore di connessione al database, lista dei generi vuota'))
+            return
         for genere in lista_generi:
             self._view.dd_genere.options.append(ft.DropdownOption(key=genere, text=genere))
     def popola_dd_biblioteca(self):
-        lista_biblioteche = self._model.get_biblioteche()
+        try:
+            lista_biblioteche = self._model.get_biblioteche()
+        except ConnectionError:
+            self._view.show_alert(('errore di connessione al database, lista delle biblioteche vuota'))
+            return
         for biblioteca in lista_biblioteche:
             self._view.dd_biblioteca.options.append(ft.DropdownOption(key=biblioteca, text=biblioteca))
 
@@ -40,7 +48,13 @@ class Controller:
     # AZIONE: MOSTRA LIBRI
     # TODO
     def btn_mostra_handler(self):
-        lista_libri = self._model.get_libri_filtrati(self.biblioteca_selezionata, self.genere_selezionato)
+        try:
+            lista_libri = self._model.get_libri_filtrati(self.biblioteca_selezionata, self.genere_selezionato)
+        except ConnectionError:
+            self._view.show_alert(('errore di connessione al database'))
+            self._view.listview_libri.controls.clear()
+
+            return
         self._view.listview_libri.controls.clear()
         for libri in lista_libri:
             self._view.listview_libri.controls.append(ft.Text(f"{libri}"))

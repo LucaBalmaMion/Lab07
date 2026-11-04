@@ -20,7 +20,10 @@ class Model:
     def get_libri_filtrati(self, biblioteca:str, genere:str):
         """Restituisce la lista di tutti i libri filtrati per biblioteca e/o genere (filtri opzionali)."""
         # TODO
-        lista_libri = self._libro_dao.leggi_libri_dal_DB()
+        try:
+            lista_libri = self._libro_dao.leggi_libri_dal_DB()
+        except ConnectionError:
+            raise ConnectionError
         if biblioteca is None and genere is None:
             return lista_libri
         lista_biblioteche = self._biblioteca_dao.leggi_biblioteca_dal_DB()
@@ -42,7 +45,10 @@ class Model:
     def get_generi(self):
         """Restituisce la lista di tutti i generi."""
         # TODO
-        lista_libri = self._libro_dao.leggi_libri_dal_DB()
+        try:
+            lista_libri = self._libro_dao.leggi_libri_dal_DB()
+        except ConnectionError:
+            raise ConnectionError
         generi = set()
         for libro in lista_libri:
             generi.add(libro.genere)
@@ -53,7 +59,10 @@ class Model:
     def get_biblioteche(self):
         """ Restituisce la lista di tutte le biblioteche."""
         # TODO
-        lista_biblioteche = self._biblioteca_dao.leggi_biblioteca_dal_DB()
+        try:
+            lista_biblioteche = self._biblioteca_dao.leggi_biblioteca_dal_DB()
+        except ConnectionError:
+            raise ConnectionError
         result = []
         for el in lista_biblioteche:
             result.append(el.nome)

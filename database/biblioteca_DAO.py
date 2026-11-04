@@ -1,3 +1,5 @@
+import mysql.connector
+
 from database.DB_connect import DBConnect
 from model.biblioteca_DTO import Biblioteca
 
@@ -12,8 +14,8 @@ class BibliotecaDAO:
 
     # TODO
     def leggi_biblioteca_dal_DB(self):
-        cnx = DBConnect.get_connection()
-        if cnx is not None:
+        try:
+            cnx = DBConnect.get_connection()
             cursore = cnx.cursor()
             query = 'select * from biblioteca'
             cursore.execute(query)
@@ -23,3 +25,5 @@ class BibliotecaDAO:
                 result.append(biblioteca)
             cnx.close()
             return result
+        except mysql.connector.Error:
+            raise ConnectionError
