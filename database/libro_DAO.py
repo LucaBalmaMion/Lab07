@@ -12,8 +12,12 @@ class LibroDAO:
 
     # TODO
     def leggi_libri_dal_DB(self):
+        cnx = None
+        cursore = None
         try:
             cnx = DBConnect.get_connection()
+            if cnx is None:
+                raise ConnectionError
             cursore = cnx.cursor()
             query = 'select * from libro'
             cursore.execute(query)
@@ -21,9 +25,13 @@ class LibroDAO:
             for row in cursore:
                 libro = Libro(*row)
                 result.append(libro)
-            cnx.close()
             return result
         except mysql.connector.Error:
             raise ConnectionError
+        finally:
+            if cursore is not None:
+                cursore.close()
+            if cnx is not None:
+                cnx.close()
 
 

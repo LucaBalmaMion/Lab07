@@ -25,6 +25,7 @@ class Controller:
         except ConnectionError:
             self._view.show_alert(('errore di connessione al database, lista dei generi vuota'))
             return
+        self._view.dd_genere.options.append(ft.DropdownOption(key='', text='Nessun filtro'))
         for genere in lista_generi:
             self._view.dd_genere.options.append(ft.DropdownOption(key=genere, text=genere))
     def popola_dd_biblioteca(self):
@@ -33,29 +34,35 @@ class Controller:
         except ConnectionError:
             self._view.show_alert(('errore di connessione al database, lista delle biblioteche vuota'))
             return
+        self._view.dd_biblioteca.options.append(ft.DropdownOption(key='', text='Nessun filtro'))
         for biblioteca in lista_biblioteche:
             self._view.dd_biblioteca.options.append(ft.DropdownOption(key=biblioteca, text=biblioteca))
 
     # CALLBACKS DROPDOWN
     # TODO
-    def dd_genere_handler(self):
+    def dd_genere_handler(self, e):
+        if self._view.dd_genere.value == '':
+            self._view.dd_genere.value = None
         self.genere_selezionato = self._view.dd_genere.value
-    def dd_biblioteca_handler(self):
+    def dd_biblioteca_handler(self, e):
+        if self._view.dd_biblioteca.value == '':
+            self._view.dd_biblioteca.value = None
         self.biblioteca_selezionata = self._view.dd_biblioteca.value
 
 
 
     # AZIONE: MOSTRA LIBRI
     # TODO
-    def btn_mostra_handler(self):
+    def btn_mostra_handler(self, e):
         try:
             lista_libri = self._model.get_libri_filtrati(self.biblioteca_selezionata, self.genere_selezionato)
         except ConnectionError:
-            self._view.show_alert(('errore di connessione al database'))
+            self._view.show_alert('errore di connessione al database')
             self._view.listview_libri.controls.clear()
-
             return
         self._view.listview_libri.controls.clear()
+        if len(lista_libri) == 0:
+            self._view.show_alert('Nessun libro trovato')
         for libri in lista_libri:
             self._view.listview_libri.controls.append(ft.Text(f"{libri}"))
         self._view.page.update()
