@@ -1,4 +1,6 @@
 import flet as ft
+from flet import Dropdown
+
 from UI.alert import AlertManager
 
 '''
@@ -37,9 +39,16 @@ class View:
 
         # --- Sezione 2: Filtraggio ---
         # TODO
+        self.dd_biblioteca = ft.Dropdown(label = 'Biblioteca', on_select=self.controller.dd_biblioteca_handler)
+        self.dd_genere = ft.Dropdown(label='Genere', on_select = self.controller.dd_genere_handler)
+        self.controller.popola_dd_genere()
+        self.controller.popola_dd_biblioteca()
+
 
         # Sezione 3: Libri
         # TODO
+        self.btn_mostra = ft.Button(content = 'Mostra', on_click = self.controller.btn_mostra_handler)
+        self.listview_libri = ft.ListView(spacing = 15, auto_scroll = True, divider_thickness = 1)
 
         # --- Toggle Tema ---
         self.toggle_cambia_tema = ft.Switch(label="Tema scuro", value=True, on_change=self.cambia_tema)
@@ -54,9 +63,14 @@ class View:
 
             # Sezione 2: Filtraggio
             # TODO
+            ft.Row([self.dd_biblioteca, self.dd_genere], alignment=ft.MainAxisAlignment.CENTER, spacing =50),
+            ft.Divider(),
 
             # Sezione 3: Libri
             # TODO
+            self.btn_mostra,
+            ft.Divider(),
+            self.listview_libri,
         )
 
         self.page.scroll = "adaptive"
